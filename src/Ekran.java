@@ -2,8 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Random;
+
+import static javax.swing.SwingUtilities.isLeftMouseButton;
+import static javax.swing.SwingUtilities.isRightMouseButton;
+
 class Kutu extends JButton{
+    boolean acikmi = false;
     int satir;
     int sutun;
     int sayi=0;
@@ -85,29 +92,63 @@ public class Ekran extends Mayinlar{
                 kutu[x][y] = new Kutu(x,y);
 
                 kutu[x][y].setBounds(16+20*x,87+20*y,20,20);
-                kutu[x][y].addActionListener(new ActionListener() {
+                kutu[x][y].addMouseListener(new MouseListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) { //hangi butona tıklandığını bul
-                        int satir = -800;
-                        int sutun = -800;
+                    public void mouseClicked(MouseEvent e) {
+                        if (isLeftMouseButton(e)){
+                            //hangi butona tıklandığını bul
+                            int satir = -800;
+                            int sutun = -800;
 
-                        for (int i = 0; i < 18; i++) {
-                            for (int j = 0; j < 25; j++) {
-                                if (e.getSource() == kutu[i][j]) {
-                                    satir = i;
-                                    sutun = j;
-                                    break;
+                            for (int i = 0; i < 18; i++) {
+                                for (int j = 0; j < 25; j++) {
+                                    if (e.getSource() == kutu[i][j]) {
+                                        satir = i;
+                                        sutun = j;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if ( !(satir == -800) && !(sutun == -800) ){ // tıklanan kutuyu gösterecek inş
-                            kutuyugoster(satir,sutun);
+                            if ( !(satir == -800) && !(sutun == -800) ){ // tıklanan kutuyu gösterecek inş
+                                kutuyugoster(satir,sutun);
+                            }
+
+                        } else if (isRightMouseButton(e)) {
+                            int satir = -800;
+                            int sutun = -800;
+
+                            for (int i = 0; i < 18; i++) {
+                                for (int j = 0; j < 25; j++) {
+                                    if (e.getSource() == kutu[i][j]) {
+                                        satir = i;
+                                        sutun = j;
+                                        break;
+                                    }
+                                }
+                            }
+                            if ( !(satir == -800) && !(sutun == -800) ){ // tıklanan kutuyu gösterecek inş
+                                kutu[satir][sutun].setIcon(new ImageIcon("src/image/bayrak.png"));
+                            }
                         }
                     }
+
+                    @Override
+                    public void mousePressed(MouseEvent e){}
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {}
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {}
                 });
+
+
                 sayibul(x,y);
                 iconbul(x,y);
-                kutuyugoster(x,y); // şimdilik bombayı falab direkt göstersin
+                //kutuyugoster(x,y); // şimdilik bombayı falab direkt göstersin
 
                 kutu[x][y].setVisible(true);
 
@@ -121,12 +162,39 @@ public class Ekran extends Mayinlar{
 
         if (mayinlar[satir][sutun] == 1) {
             kutu[satir][sutun].setIcon(bom);
-            //oyun bitecek patlama efekti bum
+            //frame.dispose();
         } else if (kutu[satir][sutun].sayi==0) {
-            // kutu[satir][sutun].setIcon();
-            //todo etrafını nasıl açcaz :)
-        }else
             kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
+
+            if ((satir-1 >= 0 && satir-1 < 18 && sutun-1 >= 0 && sutun-1 < 25)  &&  (mayinlar[satir - 1][sutun - 1] == 0))
+                kutuyugoster(satir-1,sutun-1);
+
+            if (( satir < 18 && sutun-1 >= 0 && sutun-1 < 25)  &&  (mayinlar[satir][sutun - 1] == 0))
+                kutuyugoster(satir,sutun-1);
+
+            if (( satir+1 < 18 && sutun-1 >= 0 && sutun-1 < 25)  &&  (mayinlar[satir + 1][sutun - 1] == 0))
+                kutuyugoster(satir+1,sutun-1);
+
+            if ((satir-1 >= 0 && satir-1 < 18 && sutun < 25)  &&  (mayinlar[satir - 1][sutun] == 0))
+                kutuyugoster(satir-1,sutun);
+
+            if (( satir +1 < 18 && sutun < 25)  &&  (mayinlar[satir + 1][sutun] == 1))
+                kutuyugoster(satir+1,sutun);
+
+            if ((satir-1 >= 0 && satir-1 < 18 &&  sutun+1 < 25)  &&  (mayinlar[satir - 1][sutun + 1] == 0))
+                kutuyugoster(satir-1,sutun+1);
+
+            if ((satir < 18 && sutun+1 < 25)  &&  (mayinlar[satir][sutun + 1] == 0))
+                kutuyugoster(satir,sutun+1);
+
+            if ((satir+1 < 18 && sutun+1 < 25)  &&  (mayinlar[satir + 1][sutun + 1] == 0))
+                kutuyugoster(satir+1,sutun+1);
+
+            kutu[satir][sutun].acikmi=true;
+        }else{ //sayi
+            kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
+            kutu[satir][sutun].acikmi=true;
+        }
     }
 
     public void sayibul(int x, int y) {
@@ -160,7 +228,7 @@ public class Ekran extends Mayinlar{
     }
 
     public void iconbul(int satir, int sutun) {
-        for (int i=1; i<9; i++){
+        for (int i=0; i<9; i++){
             if (kutu[satir][sutun].sayi==i){
                 ImageIcon sayi = new ImageIcon("src/image/"+i+".png");
 
