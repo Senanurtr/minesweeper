@@ -147,7 +147,7 @@ public class Ekran extends Mayinlar{
 
             if (( x +1 < 18 && y < 25)  &&  (mayinlar[x + 1][y] == 1))
                 kutu[x][y].sayi += 1;
-
+//:)
             if ((x-1 >= 0 && x-1 < 18 &&  y+1 < 25)  &&  (mayinlar[x - 1][y + 1] == 1))
                 kutu[x][y].sayi += 1;
 
