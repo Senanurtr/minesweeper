@@ -56,14 +56,6 @@ public class Ekran extends Mayinlar{
     JLabel kalanMayin;
     JLabel tilkicik;
     ImageIcon tilki = new ImageIcon("src/image/tilki.png");
-    ImageIcon bir = new ImageIcon("image/1.png");
-    ImageIcon iki = new ImageIcon("image/2.png");
-    ImageIcon uc = new ImageIcon("image/3.png");
-    ImageIcon dort = new ImageIcon("image/4.png");
-    ImageIcon bes = new ImageIcon("image/5.png");
-    ImageIcon alti = new ImageIcon("image/6.png");
-    ImageIcon yedi = new ImageIcon("image/7.png");
-    ImageIcon sekiz = new ImageIcon("image/8.png");
     ImageIcon bom = new ImageIcon("src/image/bom.png");
     ImageIcon bomba = new ImageIcon("src/image/bomba.png");
 
@@ -137,25 +129,33 @@ public class Ekran extends Mayinlar{
             kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
     }
 
-    public void sayibul(int satir, int sutun) {
-        if (mayinlar[satir][sutun]!=1 && (satir > 0 && satir < 17 && sutun > 0 && sutun < 24)){
+    public void sayibul(int x, int y) {
+
+        if (mayinlar[x][y]!=1 ){
             //todo kenardaki kutularda hata çıkıyo diye 17 24 yaptım sen bakarsın
-            if (mayinlar[satir - 1][sutun - 1] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir][sutun - 1] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir + 1][sutun - 1] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir - 1][sutun] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir + 1][sutun] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir - 1][sutun + 1] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir][sutun + 1] == 1)
-                kutu[satir][sutun].sayi += 1;
-            if (mayinlar[satir + 1][sutun + 1] == 1)
-                kutu[satir][sutun].sayi += 1;
+            if ((x-1 >= 0 && x-1 < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x - 1][y - 1] == 1))
+                kutu[x][y].sayi += 1;
+
+            if (( x < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x][y - 1] == 1))
+                kutu[x][y].sayi += 1;
+
+            if (( x+1 < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x + 1][y - 1] == 1))
+                kutu[x][y].sayi += 1;
+
+            if ((x-1 >= 0 && x-1 < 18 && y < 25)  &&  (mayinlar[x - 1][y] == 1))
+                kutu[x][y].sayi += 1;
+
+            if (( x +1 < 18 && y < 25)  &&  (mayinlar[x + 1][y] == 1))
+                kutu[x][y].sayi += 1;
+
+            if ((x-1 >= 0 && x-1 < 18 &&  y+1 < 25)  &&  (mayinlar[x - 1][y + 1] == 1))
+                kutu[x][y].sayi += 1;
+
+            if ((x < 18 && y+1 < 25)  &&  (mayinlar[x][y + 1] == 1))
+                kutu[x][y].sayi += 1;
+
+            if ((x+1 < 18 && y+1 < 25)  &&  (mayinlar[x + 1][y + 1] == 1))
+                kutu[x][y].sayi += 1;
         }
     }
 
