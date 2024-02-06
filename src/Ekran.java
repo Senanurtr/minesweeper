@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Random;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
@@ -160,47 +157,39 @@ public class Ekran extends Mayinlar{
 
     public void kutuyugoster(int satir, int sutun) {  //ya mayın var ya boş kutu ya da sayı var
 
+        if (satir < 0 || sutun < 0 || satir >= 18 || sutun >= 25 || kutu[satir][sutun].acikmi) { //bakılan kutu sınır dışındaysa döngüye girmesin
+            return;
+        }
+
+        kutu[satir][sutun].acikmi=true;
+
         if (mayinlar[satir][sutun] == 1) {
             kutu[satir][sutun].setIcon(bom);
             //frame.dispose();
         } else if (kutu[satir][sutun].sayi==0) {
             kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
 
-            if ((satir-1 >= 0 && satir-1 < 18 && sutun-1 >= 0 && sutun-1 < 25)  &&  (mayinlar[satir - 1][sutun - 1] == 0))
-                kutuyugoster(satir-1,sutun-1);
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
 
-            if (( satir < 18 && sutun-1 >= 0 && sutun-1 < 25)  &&  (mayinlar[satir][sutun - 1] == 0))
-                kutuyugoster(satir,sutun-1);
+                    if (gecerliKonum(satir + i, sutun + j)) {
+                        kutuyugoster(satir + i, sutun + j);
+                    }
+                }
+            }
 
-            if (( satir+1 < 18 && sutun-1 >= 0 && sutun-1 < 25)  &&  (mayinlar[satir + 1][sutun - 1] == 0))
-                kutuyugoster(satir+1,sutun-1);
-
-            if ((satir-1 >= 0 && satir-1 < 18 && sutun < 25)  &&  (mayinlar[satir - 1][sutun] == 0))
-                kutuyugoster(satir-1,sutun);
-
-            if (( satir +1 < 18 && sutun < 25)  &&  (mayinlar[satir + 1][sutun] == 1))
-                kutuyugoster(satir+1,sutun);
-
-            if ((satir-1 >= 0 && satir-1 < 18 &&  sutun+1 < 25)  &&  (mayinlar[satir - 1][sutun + 1] == 0))
-                kutuyugoster(satir-1,sutun+1);
-
-            if ((satir < 18 && sutun+1 < 25)  &&  (mayinlar[satir][sutun + 1] == 0))
-                kutuyugoster(satir,sutun+1);
-
-            if ((satir+1 < 18 && sutun+1 < 25)  &&  (mayinlar[satir + 1][sutun + 1] == 0))
-                kutuyugoster(satir+1,sutun+1);
-
-            kutu[satir][sutun].acikmi=true;
         }else{ //sayi
             kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
-            kutu[satir][sutun].acikmi=true;
         }
     }
 
+    private boolean gecerliKonum(int satir, int sutun) {
+        return satir >= 0 && satir < 18 && sutun >= 0 && sutun < 25;
+    }
     public void sayibul(int x, int y) {
 
         if (mayinlar[x][y]!=1 ){
-            //todo kenardaki kutularda hata çıkıyo diye 17 24 yaptım sen bakarsın
+
             if ((x-1 >= 0 && x-1 < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x - 1][y - 1] == 1))
                 kutu[x][y].sayi += 1;
 
@@ -215,7 +204,7 @@ public class Ekran extends Mayinlar{
 
             if (( x +1 < 18 && y < 25)  &&  (mayinlar[x + 1][y] == 1))
                 kutu[x][y].sayi += 1;
-//:)
+
             if ((x-1 >= 0 && x-1 < 18 &&  y+1 < 25)  &&  (mayinlar[x - 1][y + 1] == 1))
                 kutu[x][y].sayi += 1;
 
@@ -266,6 +255,13 @@ public class Ekran extends Mayinlar{
         tilkicik.setBounds(166,10,80,80);
 
         tilkicik.setIcon(tilki);
+        tilkicik.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) { //tilkiye basınca yeni ekran
+                frame.dispose();
+                new Ekran();
+            }
+        });
         frame.add(tilkicik);
     }
 
