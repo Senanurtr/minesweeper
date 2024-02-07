@@ -1,4 +1,4 @@
-package minesweeper.src;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,15 +69,15 @@ public class Ekran extends Mayinlar{
     JLabel tilkicik;
 
     //todo  minesweeper/  rica ederim teşekküre gerek yok asjdbakjsdgaklfkh
-    JLabel backgroundLabel = new JLabel(new ImageIcon("minesweeper/src/image/background.jpg"));
-    ImageIcon tilki = new ImageIcon("minesweeper/src/image/tilki.png");
-    ImageIcon bom = new ImageIcon("minesweeper/src/image/bom.png");
-    ImageIcon bos = new ImageIcon("minesweeper/src/image/bos.png");
-    ImageIcon bomflg = new ImageIcon("minesweeper/src/image/bomflg.png");
-    ImageIcon bomba = new ImageIcon("minesweeper/src/image/bomba.png");
-    ImageIcon patlayan = new ImageIcon("minesweeper/src/image/patlayan.png");
-    ImageIcon bayrak = new ImageIcon("minesweeper/src/image/bayrak.png");
-    ImageIcon cerceve = new ImageIcon("minesweeper/src/image/cerceve.png");
+    JLabel backgroundLabel = new JLabel(new ImageIcon("src/image/background.jpg"));
+    ImageIcon tilki = new ImageIcon("src/image/tilki.png");
+    ImageIcon bom = new ImageIcon("src/image/bom.png");
+    ImageIcon bos = new ImageIcon("src/image/bos.png");
+    ImageIcon bomflg = new ImageIcon("src/image/bomflg.png");
+    ImageIcon bomba = new ImageIcon("src/image/bomba.png");
+    ImageIcon patlayan = new ImageIcon("src/image/patlayan.png");
+    ImageIcon bayrak = new ImageIcon("src/image/bayrak.png");
+    ImageIcon cerceve = new ImageIcon("src/image/cerceve.png");
 
     Ekran(){ //ekrandaki görsellerin yerleştirilmesi
         kutu = new Kutu[18][25];
@@ -320,7 +320,7 @@ public class Ekran extends Mayinlar{
         }
         for (int i=0; i<9; i++){ //iconbulla birleşiyormuş harbiden
             if (kutu[x][y].sayi==i){
-                kutu[x][y].icon = new ImageIcon("minesweeper/src/image/"+i+".png");
+                kutu[x][y].icon = new ImageIcon("src/image/"+i+".png");
             }
         }
     }
