@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -20,7 +19,6 @@ class Kutu extends JButton{
         new JButton();
     }
 }
-
 
 class Mayinlar {
 
@@ -56,18 +54,19 @@ class Mayinlar {
 
 public class Ekran extends Mayinlar{
 
-    //JButton[][] buton ;
     Kutu[][] kutu ;
     JFrame frame = new JFrame();
     Timer timer;
     int time=0;
+    final int cBombasayisi = 40;
     int bombaSayisi=40;
     boolean patladi = false;
-
 
     JLabel zaman;
     JLabel kalanMayin;
     JLabel tilkicik;
+
+    //todo  minesweeper/  rica ederim teşekküre gerek yok asjdbakjsdgaklfkh
     JLabel backgroundLabel = new JLabel(new ImageIcon("src/image/background.jpg"));
     ImageIcon tilki = new ImageIcon("src/image/tilki.png");
     ImageIcon bom = new ImageIcon("src/image/bom.png");
@@ -75,10 +74,10 @@ public class Ekran extends Mayinlar{
     ImageIcon bomflg = new ImageIcon("src/image/bomflg.png");
     ImageIcon bomba = new ImageIcon("src/image/bomba.png");
     ImageIcon bayrak = new ImageIcon("src/image/bayrak.png");
+    ImageIcon cerceve = new ImageIcon("src/image/cerceve.png");
 
     Ekran(){ //ekrandaki görsellerin yerleştirilmesi
         kutu = new Kutu[18][25];
-
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         backgroundLabel.setBounds(0, 0, 2000, 2000);
@@ -86,10 +85,7 @@ public class Ekran extends Mayinlar{
 
         frame.setLayout(null);
 
-
         frame.setResizable(false);
-
-
 
         kalanMayin(bombaSayisi);
         tilki();
@@ -126,12 +122,17 @@ public class Ekran extends Mayinlar{
                                 }
                             }
                             if (!kutu[satir][sutun].acikmi){
-                            if ( !(satir == -800) && !(sutun == -800) ){ // tıklanan kutuyu gösterecek inş
-                                kutuyugoster(satir,sutun);}
+                            if ( !(satir == -800) && !(sutun == -800) ){ // tıklanan kutuyu gösteriyor
+                                kutuyugoster(satir,sutun);
+                            }
 
                             } else if (kutu[satir][sutun].acikmi) {
-                                if ( !(satir == -800) && !(sutun == -800) ){ // tıklanan kutuyu gösterecek inş
-                                    hizliAcma(satir,sutun);}
+                                if ( !(satir == -800) && !(sutun == -800) ){
+                                    if (kutu[satir][sutun].sayi==0){ //todo bi sıkıntı var gibi
+                                        kutuyugoster(satir,sutun);
+                                    }else
+                                        hizliAcma(satir,sutun);
+                                }
                             }
                         }
 
@@ -155,44 +156,28 @@ public class Ekran extends Mayinlar{
 
                                     if (!kutu[satir][sutun].bayraak && bombaSayisi > 0) {
 
-
                                         bombaSayisi--;
                                         String string = String.valueOf(bombaSayisi);
                                         kalanMayin.setText(string);
 
+                                        kutu[satir][sutun].setIcon(bayrak);
 
-                                        for (int i = 0; i < 18; i++) {
-                                            for (int j = 0; j < 25; j++) {
-                                                if (e.getSource() == kutu[i][j]) {
-                                                    satir = i;
-                                                    sutun = j;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (!(satir == -800) && !(sutun == -800)) { // tıklanan kutuyu gösterecek inş
-                                            kutu[satir][sutun].setIcon(bayrak);
-                                        }
                                         kutu[satir][sutun].bayraak = true;
                                         bitisKontrol();
                                     } else if (kutu[satir][sutun].bayraak) {
-
 
                                         bombaSayisi++;
                                         String string = String.valueOf(bombaSayisi);
                                         kalanMayin.setText(string);
 
-                                        if (!(satir == -800) && !(sutun == -800)) { // tıklanan kutuyu gösterecek inş
+                                        if (!(satir == -800) && !(sutun == -800)) {
                                             kutu[satir][sutun].setIcon(bos);
                                         }
                                         kutu[satir][sutun].bayraak = false;
 
                                     }
-
                                 }
-
                             }
-
                         }
                     }
 
@@ -209,10 +194,7 @@ public class Ekran extends Mayinlar{
                     public void mouseExited(MouseEvent e) {}
                 });
 
-
                 sayibul(x,y);
-                iconbul(x,y);
-                //kutuyugoster(x,y); // şimdilik bombayı falab direkt göstersin
 
                 kutu[x][y].setVisible(true);
 
@@ -224,115 +206,102 @@ public class Ekran extends Mayinlar{
 
     public void kutuyugoster(int satir, int sutun) {  //ya mayın var ya boş kutu ya da sayı var
         if (!kutu[satir][sutun].bayraak && !patladi){
-        if (satir < 0 || sutun < 0 || satir >= 18 || sutun >= 25 || kutu[satir][sutun].acikmi) {//bakılan kutu sınır dışındaysa döngüye girmesin
-
-            return;
-        }
-
-        kutu[satir][sutun].acikmi=true;
-
-        if (mayinlar[satir][sutun] == 1) {
-            patladi = true;
-
-            for (int i = 0; i < 18; i++) {
-                for (int j = 0; j < 25; j++) {          // todo BASILDIĞINDA BÜTÜN BOMBALAR GÖRÜNÜYOR
-                    if (mayinlar[i][j] == 1) {
-
-                      if(!kutu[i][j].bayraak){
-                        kutu[i][j].setIcon(bom);
-                      } else if (kutu[i][j].bayraak) {
-                          kutu[i][j].setIcon(bomflg);
-                      }
-
-
-                    }}}
-            JOptionPane.showMessageDialog(null, "Patladın aslanım tekrar dene");
-            timer.stop();
-        } else if (kutu[satir][sutun].sayi==0) {
-            kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
-
-
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-
-                    if (gecerliKonum(satir + i, sutun + j)) {
-                        kutuyugoster(satir + i, sutun + j);
-                    }
-                }
+            if (satir < 0 || sutun < 0 || satir >= 18 || sutun >= 25 || kutu[satir][sutun].acikmi) {//bakılan kutu sınır dışındaysa döngüye girmesin
+                return;
             }
 
-        }else{ //sayi
-            kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
-        }
+            kutu[satir][sutun].acikmi=true;
+
+            if (mayinlar[satir][sutun] == 1) {
+                patladinAslanim();
+            } else if (kutu[satir][sutun].sayi==0) {
+
+                kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
+
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+
+                        if (gecerliKonum(satir + i, sutun + j)) {
+                            kutuyugoster(satir + i, sutun + j);
+                        }
+                    }
+                }
+
+            }else{ //sayi
+                kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
+            }
         }
     }
 
     private void hizliAcma(int satir, int sutun){
+
         int hizliAcma=0;
         for (int j = -1; j <= 1; j++) {
             for (int i = -1; i <= 1; i++) {
 
                 if (gecerliKonum(satir + i, sutun + j)) {
 
-                  if (kutu[satir + i][sutun + j].bayraak) {
+                    if (kutu[satir + i][sutun + j].bayraak) {
                       hizliAcma++;
-                  }
-                  if (hizliAcma==kutu[satir ][sutun].sayi){
-                    kutuyugoster(satir + i, sutun + j );
-                      if (gecerliKonum(satir - i, sutun - j))
-                          kutuyugoster(satir - i, sutun - j );
-
-                      if (gecerliKonum(satir , sutun ))
-                          kutuyugoster(satir , sutun  );
-
-                  }
+                    }
                 }
             }
         }
+        for (int j = -1; j <= 1; j++) {
+            for (int i = -1; i <= 1; i++) {
+                if (gecerliKonum(satir + i, sutun + j)) {
 
+                    if ((hizliAcma==kutu[satir][sutun].sayi)){
+
+                        if (mayinlar[satir+i][sutun+j]==1 && !kutu[satir+i][sutun+j].bayraak){
+                            patladinAslanim();
+                        }
+                        else if (!kutu[satir+i][sutun+j].bayraak){
+                            kutu[satir+i][sutun+j].setIcon(kutu[satir+i][sutun+j].icon);
+                            kutu[satir+i][sutun+j].acikmi=true;
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    public void patladinAslanim() {
+        patladi=true;
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < 25; j++) {
+                if (mayinlar[i][j] == 1) {
+                    if (!kutu[i][j].bayraak) {
+                        kutu[i][j].setIcon(bom);
+                    } else if (kutu[i][j].bayraak) {
+                        kutu[i][j].setIcon(bomflg);
+                    }
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Patladın aslanım tekrar dene");
+        timer.stop();
+    }
 
     private boolean gecerliKonum(int satir, int sutun) {
         return satir >= 0 && satir < 18 && sutun >= 0 && sutun < 25;
     }
     public void sayibul(int x, int y) {
+        if (mayinlar[x][y] != 1) {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    int yeniX = x + i;
+                    int yeniY = y + j;
 
-        if (mayinlar[x][y]!=1 ){
-
-            if ((x-1 >= 0 && x-1 < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x - 1][y - 1] == 1))
-                kutu[x][y].sayi += 1;
-
-            if (( x < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x][y - 1] == 1))
-                kutu[x][y].sayi += 1;
-
-            if (( x+1 < 18 && y-1 >= 0 && y-1 < 25)  &&  (mayinlar[x + 1][y - 1] == 1))
-                kutu[x][y].sayi += 1;
-
-            if ((x-1 >= 0 && x-1 < 18 && y < 25)  &&  (mayinlar[x - 1][y] == 1))
-                kutu[x][y].sayi += 1;
-
-            if (( x +1 < 18 && y < 25)  &&  (mayinlar[x + 1][y] == 1))
-                kutu[x][y].sayi += 1;
-
-            if ((x-1 >= 0 && x-1 < 18 &&  y+1 < 25)  &&  (mayinlar[x - 1][y + 1] == 1))
-                kutu[x][y].sayi += 1;
-
-            if ((x < 18 && y+1 < 25)  &&  (mayinlar[x][y + 1] == 1))
-                kutu[x][y].sayi += 1;
-
-            if ((x+1 < 18 && y+1 < 25)  &&  (mayinlar[x + 1][y + 1] == 1))
-                kutu[x][y].sayi += 1;
+                    if (gecerliKonum(yeniX, yeniY) && mayinlar[yeniX][yeniY] == 1) {
+                        kutu[x][y].sayi += 1;
+                    }
+                }
+            }
         }
-    }
-
-    public void iconbul(int satir, int sutun) {
-        for (int i=0; i<9; i++){
-            if (kutu[satir][sutun].sayi==i){
-                ImageIcon sayi = new ImageIcon("src/image/"+i+".png");
-
-                kutu[satir][sutun].icon = sayi;
-                //kutu[satir][sutun].setIcon(sayi); //bu silinecek kutugöstere yazcaz
+        for (int i=0; i<9; i++){ //iconbulla birleşiyormuş harbiden
+            if (kutu[x][y].sayi==i){
+                kutu[x][y].icon = new ImageIcon("src/image/"+i+".png");
             }
         }
     }
@@ -342,7 +311,7 @@ public class Ekran extends Mayinlar{
         zaman.setBounds(298,20,70,60);
         zaman.setFont(new Font("Arial", Font.BOLD, 18));
 
-        zaman.setIcon(new ImageIcon("src/image/cerceve.png"));
+        zaman.setIcon(cerceve);
 
         zaman.setVisible(true);
         frame.add(zaman);
@@ -380,22 +349,17 @@ public class Ekran extends Mayinlar{
     void bitisKontrol(){
         int bitis = 0;
 
-            for (int y = 0 ; y <25 ; y++){
-                for (int x = 0 ; x < 18 ; x++){
+        for (int y = 0 ; y <25 ; y++){
+            for (int x = 0 ; x < 18 ; x++){
 
-                    if (mayinMI[x][y]){
-                        if (kutu[x][y].bayraak){
-                            bitis++;
-                        }
+                if (mayinMI[x][y]){
+                    if (kutu[x][y].bayraak){
+                        bitis++;
                     }
-
-
                 }
-
-
-
+            }
         }
-        if (bitis==40) {
+        if (bitis==cBombasayisi) {
             timer.stop();
             int minutes = time / 60;
             int seconds = time % 60;
@@ -405,7 +369,6 @@ public class Ekran extends Mayinlar{
         }
 
     }
-
 
     void kalanMayin(int bombaSayisi){
         kalanMayin = new JLabel();
