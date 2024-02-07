@@ -1,3 +1,5 @@
+package minesweeper.src;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -67,14 +69,15 @@ public class Ekran extends Mayinlar{
     JLabel tilkicik;
 
     //todo  minesweeper/  rica ederim teşekküre gerek yok asjdbakjsdgaklfkh
-    JLabel backgroundLabel = new JLabel(new ImageIcon("src/image/background.jpg"));
-    ImageIcon tilki = new ImageIcon("src/image/tilki.png");
-    ImageIcon bom = new ImageIcon("src/image/bom.png");
-    ImageIcon bos = new ImageIcon("src/image/bos.png");
-    ImageIcon bomflg = new ImageIcon("src/image/bomflg.png");
-    ImageIcon bomba = new ImageIcon("src/image/bomba.png");
-    ImageIcon bayrak = new ImageIcon("src/image/bayrak.png");
-    ImageIcon cerceve = new ImageIcon("src/image/cerceve.png");
+    JLabel backgroundLabel = new JLabel(new ImageIcon("minesweeper/src/image/background.jpg"));
+    ImageIcon tilki = new ImageIcon("minesweeper/src/image/tilki.png");
+    ImageIcon bom = new ImageIcon("minesweeper/src/image/bom.png");
+    ImageIcon bos = new ImageIcon("minesweeper/src/image/bos.png");
+    ImageIcon bomflg = new ImageIcon("minesweeper/src/image/bomflg.png");
+    ImageIcon bomba = new ImageIcon("minesweeper/src/image/bomba.png");
+    ImageIcon patlayan = new ImageIcon("minesweeper/src/image/patlayan.png");
+    ImageIcon bayrak = new ImageIcon("minesweeper/src/image/bayrak.png");
+    ImageIcon cerceve = new ImageIcon("minesweeper/src/image/cerceve.png");
 
     Ekran(){ //ekrandaki görsellerin yerleştirilmesi
         kutu = new Kutu[18][25];
@@ -82,10 +85,12 @@ public class Ekran extends Mayinlar{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         backgroundLabel.setBounds(0, 0, 2000, 2000);
         frame.setBounds(560,85,407,633);
-
+        backgroundLabel.setBackground(new Color(198,233,251));
+        backgroundLabel.setOpaque(true);
         frame.setLayout(null);
 
-        frame.setResizable(false);
+        //frame.setResizable(false);
+        frame.setIconImage(bomflg.getImage());
 
         kalanMayin(bombaSayisi);
         tilki();
@@ -128,10 +133,9 @@ public class Ekran extends Mayinlar{
 
                             } else if (kutu[satir][sutun].acikmi) {
                                 if ( !(satir == -800) && !(sutun == -800) ){
-                                    if (kutu[satir][sutun].sayi==0){ //todo bi sıkıntı var gibi
-                                        kutuyugoster(satir,sutun);
-                                    }else
-                                        hizliAcma(satir,sutun);
+                                    if (!patladi)   {
+                                         hizliAcma(satir,sutun);
+                                    }
                                 }
                             }
                         }
@@ -213,7 +217,10 @@ public class Ekran extends Mayinlar{
             kutu[satir][sutun].acikmi=true;
 
             if (mayinlar[satir][sutun] == 1) {
+                kutu[satir][sutun].setIcon(patlayan);
+                kutu[satir][sutun].icon=patlayan;
                 patladinAslanim();
+
             } else if (kutu[satir][sutun].sayi==0) {
 
                 kutu[satir][sutun].setIcon(kutu[satir][sutun].icon);
@@ -257,8 +264,12 @@ public class Ekran extends Mayinlar{
                             patladinAslanim();
                         }
                         else if (!kutu[satir+i][sutun+j].bayraak){
-                            kutu[satir+i][sutun+j].setIcon(kutu[satir+i][sutun+j].icon);
-                            kutu[satir+i][sutun+j].acikmi=true;
+
+
+                                kutuyugoster(satir+i,sutun+j);
+
+
+
                         }
                     }
                 }
@@ -270,11 +281,19 @@ public class Ekran extends Mayinlar{
         patladi=true;
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 25; j++) {
-                if (mayinlar[i][j] == 1) {
+                if (mayinlar[i][j] == 1 ) {
+
+
                     if (!kutu[i][j].bayraak) {
-                        kutu[i][j].setIcon(bom);
+                        if ( kutu[i][j].icon!=patlayan){
+
+
+                        kutu[i][j].setIcon(bom);}
+
                     } else if (kutu[i][j].bayraak) {
+
                         kutu[i][j].setIcon(bomflg);
+
                     }
                 }
             }
@@ -301,7 +320,7 @@ public class Ekran extends Mayinlar{
         }
         for (int i=0; i<9; i++){ //iconbulla birleşiyormuş harbiden
             if (kutu[x][y].sayi==i){
-                kutu[x][y].icon = new ImageIcon("src/image/"+i+".png");
+                kutu[x][y].icon = new ImageIcon("minesweeper/src/image/"+i+".png");
             }
         }
     }
