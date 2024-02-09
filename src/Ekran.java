@@ -6,9 +6,11 @@ import java.util.Random;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
-public class Ekran extends Mayinlar{
+public class Ekran{
 
     Kutu[][] kutu ;
+    int[][] mayinlar = new int[18][25];
+    boolean[][] mayinMI = new boolean[18][25];
     JFrame frame = new JFrame();
     Timer timer;
     int time=0;
