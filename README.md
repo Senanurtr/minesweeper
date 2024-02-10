@@ -17,6 +17,6 @@ The game randomly generates bombs with the first click of the user. Left-clickin
 If you place 40 flags correctly, you win the game. Enjoy the game!
 
 
-Ahmet Söğüt
-Sudenaz Zünber
+Ahmet Söğüt,
+Sudenaz Zünber,
 Sena Nur Türkmen
