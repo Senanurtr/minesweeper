@@ -6,7 +6,7 @@ Oyun kullanıcının ilk tıklaması ile birlikte bombaları rastgele oluşturur
 
 40 adet bayrağı doğru yerleştirdiğiniz durumda oyunu kazanırsınız. İyi eğlenceler.
 
-
+hihi
 
 Game Objective:
 This game is a simple version of the classic Minesweeper game in Java programming language. The goal of the players is to find 40 mines randomly placed in 18x25 boxes.
